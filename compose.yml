@@ -6,4 +6,4 @@ services:
   api-libros:
     build ./api-libros
     ports:
-      - XXXX:XXXX
+      - 8081:8080
