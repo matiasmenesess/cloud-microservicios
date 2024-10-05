@@ -2,7 +2,7 @@ services:
   api-review:
     build ./api-review
     ports:
-      - XXXX:XXXX
+      - 3001:3000
   api-libros:
     build ./api-libros
     ports:
