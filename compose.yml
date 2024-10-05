@@ -1,0 +1,10 @@
+services:
+  api-review:
+    build: ./api-review  
+    ports:
+      - "8000:3000"  
+
+  api-libros:
+    build: ./api-libros  
+    ports:
+      - "8080:8080"  
