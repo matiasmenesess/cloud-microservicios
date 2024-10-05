@@ -1,0 +1,9 @@
+services:
+  api-review:
+    build ./api-review
+    ports:
+      - XXXX:XXXX
+  api-libros:
+    build ./api-libros
+    ports:
+      - XXXX:XXXX
