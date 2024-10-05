@@ -1,20 +1,32 @@
-# Usa la imagen oficial de Node.js como base
-FROM node:16
+# Etapa 1: Construcción de la aplicación con Maven
+FROM maven:3.8.4-openjdk-17 AS build
 
 # Establece el directorio de trabajo en el contenedor
 WORKDIR /usr/src/app
 
-# Copia el archivo package.json y package-lock.json al contenedor
-COPY package*.json ./
+# Copia el archivo pom.xml para descargar las dependencias
+COPY pom.xml .
 
-# Instala las dependencias de la aplicación
-RUN npm install
+# Descargar las dependencias de Maven
+RUN mvn dependency:go-offline
 
-# Copia el resto de la aplicación en el contenedor
-COPY . .
+# Copia el resto del código fuente de la aplicación al contenedor
+COPY src ./src
 
-# Expone el puerto en el que corre la aplicación (en este caso, el puerto 3000)
-EXPOSE 3000
+# Compila el proyecto y empaqueta en un archivo JAR
+RUN mvn clean package -DskipTests
+
+# Etapa 2: Imagen final con OpenJDK
+FROM openjdk:17-jdk-slim
+
+# Establece el directorio de trabajo en el contenedor
+WORKDIR /usr/src/app
+
+# Copia el archivo JAR generado desde la etapa anterior
+COPY --from=build /usr/src/app/target/Microservice-JAVA-1.0-SNAPSHOT.jar ./Microservice-JAVA.jar
+
+# Expone el puerto en el que corre la aplicación (el puerto 8080 por defecto en Spring Boot)
+EXPOSE 8080
 
 # Comando para iniciar la aplicación
-CMD ["npm", "start"]
+CMD ["java", "-jar", "Microservice-JAVA.jar"]
