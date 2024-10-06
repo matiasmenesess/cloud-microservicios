@@ -5,7 +5,7 @@ info:
   version: 1.0.0
 
 servers:
-  - url: http://localhost:8000
+  - url: http://107.20.212.250:8000
     description: Servidor de desarrollo
 
 paths:
