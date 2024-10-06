@@ -25,7 +25,7 @@ WORKDIR /usr/src/app
 # Copia el archivo JAR generado desde la etapa anterior
 COPY --from=build /usr/src/app/target/Microservice-JAVA-1.0-SNAPSHOT.jar ./Microservice-JAVA.jar
 
-# Expone el puerto en el que corre la aplicación (el puerto 8080 por defecto en Spring Boot)
+# Expone el puerto en el que corre la aplicación 
 EXPOSE 8080
 
 # Comando para iniciar la aplicación
