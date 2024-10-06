@@ -1,0 +1,9 @@
+com\proyecto\MicroservicioApplication.class
+com\proyecto\repository\CategoriaRepository.class
+com\proyecto\model\Libro.class
+com\proyecto\model\Autor.class
+com\proyecto\repository\LibroRepository.class
+com\proyecto\controller\LibroController.class
+com\proyecto\model\Categoria.class
+com\proyecto\service\LibroService.class
+com\proyecto\repository\AutorRepository.class
