@@ -1,7 +1,7 @@
 openapi: 3.0.0
 info:
-  title: API de Estudiantes
-  description: API para gestionar registros de estudiantes.
+  title: API de Reseñas
+  description: API para gestionar reseñas de libros por parte de clientes.
   version: 1.0.0
 
 servers:
@@ -9,106 +9,142 @@ servers:
     description: Servidor de desarrollo
 
 paths:
-  /students:
+  /reviews:
     get:
-      summary: Obtener todos los estudiantes
+      summary: Obtener todas las reseñas
       responses:
         '200':
-          description: Un arreglo JSON de estudiantes
+          description: Un arreglo JSON de reseñas
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                    firstname:
-                      type: string
-                    lastname:
-                      type: string
-                    gender:
-                      type: string
-                    age:
-                      type: integer
+                  $ref: '#/components/schemas/Review'
     post:
-      summary: Crear un nuevo estudiante
+      summary: Crear una nueva reseña
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
-              type: object
-              properties:
-                firstname:
-                  type: string
-                lastname:
-                  type: string
-                gender:
-                  type: string
-                age:
-                  type: integer
+              $ref: '#/components/schemas/Review'
       responses:
-        '200':
-          description: Estudiante creado exitosamente
-
-  /student/{id}:
-    parameters:
-      - in: path
-        name: id
-        required: true
-        schema:
-          type: integer
-    get:
-      summary: Obtener un estudiante por ID
-      responses:
-        '200':
-          description: Un objeto de estudiante
+        '201':
+          description: Reseña creada exitosamente
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  id:
-                    type: integer
-                  firstname:
-                    type: string
-                  lastname:
-                    type: string
-                  gender:
-                    type: string
-                  age:
-                    type: integer
+                $ref: '#/components/schemas/Review'
+        '400':
+          description: Error en la solicitud
+
+  /reviews/cliente/{id_cliente}:
+    get:
+      summary: Obtener reseñas por ID de cliente
+      parameters:
+        - in: path
+          name: id_cliente
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Reseñas del cliente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
         '404':
-          description: Estudiante no encontrado
+          description: No se encontraron reseñas para el cliente
+
+  /reviews/libro/{id_libro}:
+    get:
+      summary: Obtener reseñas por ID de libro
+      parameters:
+        - in: path
+          name: id_libro
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Reseñas del libro
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+        '404':
+          description: No se encontraron reseñas para el libro
+
+  /reviews/{id}:
     put:
-      summary: Actualizar un estudiante por ID
+      summary: Actualizar una reseña por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
       requestBody:
         required: true
         content:
-          application/x-www-form-urlencoded:
+          application/json:
             schema:
-              type: object
-              properties:
-                firstname:
-                  type: string
-                lastname:
-                  type: string
-                gender:
-                  type: string
-                age:
-                  type: integer
+              $ref: '#/components/schemas/Review'
       responses:
         '200':
-          description: Estudiante actualizado exitosamente
+          description: Reseña actualizada exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
         '404':
-          description: Estudiante no encontrado
+          description: Reseña no encontrada
     delete:
-      summary: Eliminar un estudiante por ID
+      summary: Eliminar una reseña por ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
       responses:
         '200':
-          description: Estudiante eliminado exitosamente
+          description: Reseña eliminada exitosamente
         '404':
-          description: Estudiante no encontrado
+          description: Reseña no encontrada
 
+components:
+  schemas:
+    Review:
+      type: object
+      properties:
+        id:
+          type: string
+          description: ID de la reseña
+        id_libro:
+          type: string
+          description: ID del libro
+        id_cliente:
+          type: string
+          description: ID del cliente que escribió la reseña
+        puntuacion:
+          type: integer
+          description: Puntuación otorgada al libro (1-5)
+        resena:
+          type: string
+          description: Texto de la reseña
+        fecha:
+          type: string
+          format: date
+          description: Fecha en la que se escribió la reseña
+      required:
+        - id_libro
+        - id_cliente
+        - puntuacion
+        - resena
